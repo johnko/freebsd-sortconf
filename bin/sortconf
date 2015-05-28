@@ -26,13 +26,14 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150528-044922
+SCRIPTVERSION=150528-045016
 
 CONFIGFILES="
     /boot/loader.conf
     /boot/loader.conf.local
-    # /etc/rc.conf
-    # /etc/rc.conf.local
+    /etc/rc.conf.local
+    /etc/rc.conf.d/netwait
+    /etc/rc.conf.d/routing
     /etc/rc.conf.d/sendmail
 " # end of CONFIGFILES
 
@@ -40,6 +41,10 @@ CONFIGFILES="
 # /etc/rc.conf.d/network
 # /etc/ssh/sshd_config
 # /etc/ssh/ssh_config
+
+if [ "x-f" == "x${1}" ]; then
+    FORCE=1
+fi
 
 for i in ${CONFIGFILES}; do
     # file exists and is writable
@@ -51,8 +56,13 @@ for i in ${CONFIGFILES}; do
             # diff side by side
             diff -y ${i} ${i}.tmp
             OVERWRITE=n
-            echo -n "Overwrite? [y/n]"
-            read OVERWRITE
+            if [ "x1" == "x${FORCE}" ]; then
+                OVERWRITE=y
+            fi
+            if [ "x" == "x${FORCE}" ]; then
+                echo -n "Overwrite? [y/n]"
+                read OVERWRITE
+            fi
             if [ "xy" == "x${OVERWRITE}" ]; then
                 # cat so that we don't change file permissions
                 cat ${i}.tmp > ${i}
