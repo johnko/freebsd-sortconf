@@ -26,7 +26,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150528-044535
+SCRIPTVERSION=150528-044647
 
 CONFIGFILES="
     /boot/loader.conf
@@ -51,7 +51,7 @@ for i in ${CONFIGFILES}; do
             OVERWRITE=n
             echo -n "Overwrite? [y/n]"
             read OVERWRITE
-            if [ "x" == "xy" ]; then
+            if [ "xy" == "x${OVERWRITE}" ]; then
                 cat ${i}.tmp > ${i}
             fi
         fi
