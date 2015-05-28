@@ -26,7 +26,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150528-042507
+SCRIPTVERSION=150528-044225
 
 CONFIGFILES="
     /boot/loader.conf
@@ -46,12 +46,13 @@ for i in ${CONFIGFILES}; do
     if [ -w ${i} ]; then
         # sort and show unique lines
         cat ${i} | sort -u > ${i}.tmp
-        diff ${i} ${i}.tmp
-        OVERWRITE=n
-        echo -n "Overwrite? [y/n]"
-        read OVERWRITE
-        if [ "x" == "xy" ]; then
-            cat ${i}.tmp > ${i}
+        if ! diff ${i} ${i}.tmp; then
+            OVERWRITE=n
+            echo -n "Overwrite? [y/n]"
+            read OVERWRITE
+            if [ "x" == "xy" ]; then
+                cat ${i}.tmp > ${i}
+            fi
         fi
         rm ${i}.tmp
     fi
