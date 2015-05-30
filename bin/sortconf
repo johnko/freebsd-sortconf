@@ -26,7 +26,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150528-045016
+SCRIPTVERSION=150530-013518
 
 CONFIGFILES="
     /boot/loader.conf
@@ -44,17 +44,22 @@ CONFIGFILES="
 
 if [ "x-f" == "x${1}" ]; then
     FORCE=1
+    shift
+fi
+
+if [ "x" 1= "x${1}" ]; then
+    MNTDIR=${1}
 fi
 
 for i in ${CONFIGFILES}; do
     # file exists and is writable
-    if [ -w ${i} ]; then
+    if [ -w ${MNTDIR}${i} ]; then
         # sort and show unique lines
-        cat ${i} | sort -u > ${i}.tmp
-        if ! diff -q ${i} ${i}.tmp ; then
-            echo "########## Diffing ${i} ${i}.tmp ##########"
+        cat ${MNTDIR}${i} | sort -u > ${MNTDIR}${i}.tmp
+        if ! diff -q ${MNTDIR}${i} ${MNTDIR}${i}.tmp ; then
+            echo "########## Diffing ${MNTDIR}${i} ${MNTDIR}${i}.tmp ##########"
             # diff side by side
-            diff -y ${i} ${i}.tmp
+            diff -y ${MNTDIR}${i} ${MNTDIR}${i}.tmp
             OVERWRITE=n
             if [ "x1" == "x${FORCE}" ]; then
                 OVERWRITE=y
@@ -65,9 +70,9 @@ for i in ${CONFIGFILES}; do
             fi
             if [ "xy" == "x${OVERWRITE}" ]; then
                 # cat so that we don't change file permissions
-                cat ${i}.tmp > ${i}
+                cat ${MNTDIR}${i}.tmp > ${MNTDIR}${i}
             fi
         fi
-        rm ${i}.tmp
+        rm ${MNTDIR}${i}.tmp
     fi
 done
