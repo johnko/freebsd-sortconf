@@ -47,7 +47,7 @@ if [ "x-f" == "x${1}" ]; then
     shift
 fi
 
-if [ "x" 1= "x${1}" ]; then
+if [ "x" != "x${1}" ]; then
     MNTDIR=${1}
 fi
 
