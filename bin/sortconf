@@ -35,6 +35,7 @@ CONFIGFILES="
     /etc/rc.conf.d/netwait
     /etc/rc.conf.d/routing
     /etc/rc.conf.d/sendmail
+    /etc/rc.conf.d/keypkg
 " # end of CONFIGFILES
 
 # don't do these because it might be in a specific order:
